@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, rgba(63, 81, 181, 0.9), rgba(33, 150, 243, 0.9)), 
+                        url('https://cdn.pixabay.com/photo/2019/04/24/21/55/cinema-4153289_640.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            color: #ffeb3b;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .container h2 {
+            color: #ffeb3b;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #ffeb3b;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #ffeb3b;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 235, 59, 0.7);
+        }
+
+        .form-group button {
+            background-color: #ffeb3b;
+            color: #333;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 235, 59, 0.8);
+        }
+
+        .recommendations ul {
+        list-style-type: none;
+        padding: 0;
+        max-height: 300px; /* Limit the height of the list */
+        overflow-y: auto; /* Add vertical scrolling */
+        border: 1px solid #ddd; /* Add a subtle border */
+        border-radius: 4px; /* Round the corners */
+        padding: 10px; /* Add some padding */
+        background-color: #f9f9f9; /* Light background for better contrast */
+    }
+
+    .recommendations li {
+        font-size: 1.4rem; /* Larger font size for better readability */
+        font-family: 'Georgia', serif; /* Stylish serif font */
+        color: #555; /* Softer color for better aesthetics */
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+        transition: transform 0.3s ease, color 0.3s ease; /* Add hover effect */
+    }
+
+    .recommendations li:last-child {
+        border-bottom: none; /* Remove the border for the last item */
+    }
+
+    .recommendations li:hover {
+        transform: translateX(10px); /* Slightly shift on hover */
+        color: #3f51b5; /* Change color on hover */
+    }
+
+    /* Add custom scrollbar styles */
+    .recommendations ul::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .recommendations ul::-webkit-scrollbar-thumb {
+        background-color: #3f51b5;
+        border-radius: 4px;
+    }
+
+    .recommendations ul::-webkit-scrollbar-track {
+        background: #ddd;
+    }
+        .error {
+            color: #f44336;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #ffeb3b;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Movie Recommendations</h1>
+    </header>
+
+    <div class="container">
+        <form method="post" action="/get_movies/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="genre">Enter Genre:</label>
+                <input type="text" id="genre" name="genre" placeholder="e.g., Action, Drama, Sci-Fi">
+            </div>
+            <div class="form-group">
+                <button type="submit">Get Recommendations</button>
+            </div>
+        </form>
+
+        {% if movies %}
+        <div class="recommendations">
+            <h2>Movies in Genre: "{{ request.POST.genre }}"</h2>
+            <ul>
+                {% for movie in movies %}
+                <li>{{ movie }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% elif error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        &copy; 2024 Movie Recommendations | All rights reserved. <a href="#">Privacy Policy</a>
+    </footer>
+
+</body>
+
+</html>

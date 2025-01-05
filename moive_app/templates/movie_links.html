@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Link Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #141E30, #243B55);
+            color: #f5f5f5;
+        }
+
+        header {
+            background: #1E293B;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            margin: 0;
+            color: #FFC857;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #1A202C;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #3B475B;
+            border-radius: 8px;
+            background: #2D3748;
+            color: #FFF;
+        }
+
+        .form-group input:focus {
+            border-color: #FFC857;
+            outline: none;
+            background: #374151;
+        }
+
+        .form-group button {
+            display: inline-block;
+            background: #FFC857;
+            color: #1A202C;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background: #FFB347;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .results h2 {
+            font-size: 1.8rem;
+            font-family: 'Montserrat', sans-serif;
+            color: #FFC857;
+            margin-bottom: 15px;
+        }
+
+        .results a {
+            font-size: 1.2rem;
+            color: #6EE7B7;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .results a:hover {
+            text-decoration: underline;
+            color: #4ADE80;
+        }
+
+        .error {
+            color: #E53E3E;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            background: #FEB2B2;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            background: #1E293B;
+            color: #f5f5f5;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: #FFC857;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find Your Movie Link</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="movie" placeholder="Enter movie title" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Get Link</button>
+            </div>
+        </form>
+
+        {% if movie_title and url %}
+        <div class="results">
+            <h2>Link for "{{ movie_title }}":</h2>
+            <a href="{{ url }}" target="_blank">{{ url }}</a>
+        </div>
+        {% elif error %}
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

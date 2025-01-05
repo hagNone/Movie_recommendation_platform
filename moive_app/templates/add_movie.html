@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Movie</title>
+    <style>
+        /* General Reset */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTAyL3Jhd3BpeGVsX29mZmljZV81N18yNTQwOV9waG90b19fMzVfbW92aWVfZmlsbV9iYWNrZ3JvdW5kX19mb3JfcF9hODc4MWEyNS05ZmIyLTQ2NzgtOWE3My0xMDBkMDdkODc1ZDZfMS5qcGc.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8); /* Dark semi-transparent background for contrast */
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            color: #ffcc29;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column; /* Stack form fields vertically */
+            gap: 20px; /* Add space between form fields */
+        }
+
+        .form-group {
+            width: 100%; /* Make form fields take full width */
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fffae3;
+            display: block;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            width: 100%; /* Full width of the form */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            box-shadow: 0 0 5px #ffcc29;
+        }
+
+        .form-submit {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-submit button {
+            background-color: #ffcc29;
+            color: #333;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .form-submit button:hover {
+            transform: scale(1.05);
+            background-color: #f2b01e;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #fffae3;
+        }
+
+        footer a {
+            color: #ffcc29;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add Movie Details</h1>
+        <form method="post">
+            {% csrf_token %}
+
+            {% if error_message %}
+                <div class="error-message">
+                    <p>{{ error_message }}</p>
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="Movie title">Movie title</label>
+                {{ movie_form.movie_title }}
+                {% if movie_form.movie_title.errors %}
+                    <div class="error-message">
+                        {% for error in movie_form.movie_title.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="genres">Genres</label>
+                {{ movie_form.genres }}
+                {% if movie_form.genres.errors %}
+                    <div class="error-message">
+                        {% for error in movie_form.genres.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label type='float' for="imdb">IMDB Rating</label>
+                {{ movie_form.imdb_rating }}
+                {% if movie_form.imdb_rating.errors %}
+                    <div class="error-message">
+                        {% for error in movie_form.imdb_rating.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="keywords">Keywords</label>
+                {{ movie_form.keywords }}
+                {% if movie_form.keywords.errors %}
+                    <div class="error-message">
+                        {% for error in movie_form.keywords.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="overview">Overview</label>
+                {{ movie_form.overview }}
+                {% if movie_form.overview.errors %}
+                    <div class="error-message">
+                        {% for error in movie_form.overview.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="tagline">Tagline</label>
+                {{ movie_form.tagline }}
+                {% if movie_form.tagline.errors %}
+                    <div class="error-message">
+                        {% for error in movie_form.tagline.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="release_date">Release Date</label>
+                {{ movie_form.release_date }}
+                {% if movie_form.release_date.errors %}
+                    <div class="error-message">
+                        {% for error in movie_form.release_date.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="URL">URL</label>
+                {{ movie_form.url }}
+                {% if movie_form.url.errors %}
+                    <div class="error-message">
+                        {% for error in movie_form.url.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+
+                <div class="form-group">
+                    <label for="director">Director</label>
+                    <input type="text" id="director" name="director" placeholder="Enter director name" value="{{ metadata_form.director.value }}">
+                    {% if metadata_form.director.errors %}
+                        <div class="error-message">
+                            {% for error in metadata_form.director.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            
+                <div class="form-group">
+                    <label for="cast">Cast</label>
+                    <textarea id="cast" name="cast" placeholder="Enter main cast">{{ metadata_form.cast.value }}</textarea>
+                    {% if metadata_form.cast.errors %}
+                        <div class="error-message">
+                            {% for error in metadata_form.cast.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            
+                <div class="form-group">
+                    <label for="original_language">Original Language</label>
+                    <input type="text" id="original_language" name="original_language" placeholder="e.g., English" value="{{ metadata_form.original_language.value }}">
+                    {% if metadata_form.original_language.errors %}
+                        <div class="error-message">
+                            {% for error in metadata_form.original_language.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            
+                <!-- Financial Section -->
+                <div class="form-group">
+                    <label for="budget">Budget</label>
+                    <input type="number" id="budget" name="budget" placeholder="Enter budget in USD" value="{{ financials_form.budget.value }}">
+                    {% if financials_form.budget.errors %}
+                        <div class="error-message">
+                            {% for error in financials_form.budget.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            
+                <div class="form-group">
+                    <label for="revenue">Revenue</label>
+                    <input type="number" id="revenue" name="revenue" placeholder="Enter revenue in USD" value="{{ financials_form.revenue.value }}">
+                    {% if financials_form.revenue.errors %}
+                        <div class="error-message">
+                            {% for error in financials_form.revenue.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            
+
+                <div class="form-submit">
+                    <button type="submit" href="{% url 'add_movie' %}">Submit Movie Details</button>
+                </div>  
+            </form>
+            <footer>
+                <p><a href="{% url 'home' %}">Back to Homepage</a></p>
+            </footer>
+           
+        </div>
+    </body>
